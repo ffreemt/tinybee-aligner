@@ -16,12 +16,15 @@
     resu = np.array(resu)
 
     idx = -1
-    idx += 1; (resu[idx], src_text[int(resu[idx, 0])], tgt_text[int(resu[idx, 1])]) if all(resu[idx]) else resu[idx]
+    idx += 1; (resu[idx], src_text[int(resu[idx, 0])],
+        tgt_text[int(resu[idx, 1])]) if all(resu[idx]) else resu[idx]
 
-    idx += 1;  i0, i1, i2 = resu[idx]; '***' if i0 == '' else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], '' if i2 == '' else i2
+    idx += 1;  i0, i1, i2 = resu[idx]; '***' if i0 == ''
+    else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
+    if i2 == '' else i2
 
 """
-# pylint: disable=C0301
+# pylint: disable=line-too-long
 
 import logging
 import pickle
@@ -69,6 +72,7 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
 
         # find loc to insert
         elm0, elm1, elm2 = elm
+        idx = -1
         for idx, loc in enumerate(buff):
             if loc[0] > elm0:
                 break
