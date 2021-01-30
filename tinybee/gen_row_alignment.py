@@ -1,5 +1,17 @@
 """Gen proper alignment for a given triple_set.
 
+    cmat = fetch_sent_corr(src, tgt)
+    src_len, tgt_len = np.array(cmat).shape
+    r_ali = gen_row_alignment(cmat, tgt_len, src_len)  # note the order
+    src[r_ali[1]], tgt[r_ali[0]], r_ali[2]
+
+    or  !!!  (targer, source)
+    cmat = fetch_sent_corr(tgt, src)  # note the order
+    src_len, tgt_len = np.array(cmat).shape
+    r_ali = gen_row_alignment(cmat, src_len, tgt_len)
+    src[r_ali[0]], tgt[r_ali[1]], r_ali[2]
+
+    ---
     src_txt = 'data/wu_ch2_en.txt'
     tgt_txt = 'data/wu_ch2_zh.txt'
 
@@ -22,7 +34,6 @@
     idx += 1;  i0, i1, i2 = resu[idx]; '***' if i0 == ''
     else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
     if i2 == '' else i2
-
 """
 # pylint: disable=line-too-long
 
@@ -36,16 +47,12 @@ from tinybee.find_pairs import find_pairs
 LOGGER = logging.getLogger(__name__)
 LOGGER.addHandler(logging.NullHandler())
 
-# print('Will [gen_row] be rerun?')
 
-
-# fmt: off
 def gen_row_alignment(  # pylint: disable=too-many-locals
-        t_set,
-        src_len,
-        tgt_len,
+    t_set,
+    src_len,
+    tgt_len,
 ):
-    # fmt: off
     """Gen proper rows for given triple_set.
 
     Arguments:

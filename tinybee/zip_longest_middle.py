@@ -2,13 +2,11 @@
 
 zip_longest(iter1 [,iter2 [...]], [fillvalue=None]) --> zip_longest object
 """
-# from nose.tools import eq_
+# pylint:
 
 
 def zip_longest_middle(list1, list2, fillvalue=None):
-    """
-    zip_longest_middle(list1, list2, fillvalue=None).
-    """
+    """zip_longest_middle(list1, list2, fillvalue=None)."""
     len1 = len(list1)
     len2 = len(list2)
 
