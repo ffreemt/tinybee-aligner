@@ -36,12 +36,14 @@ LOGGER.addHandler(logging.NullHandler())
 # print('Will [gen_row] be rerun?')
 
 
+# fmt: off
 def gen_row_alignment(  # pylint: disable=too-many-locals
         t_set,
         src_len,
         tgt_len,
 ):
-    """gen proper rows for given triple_set
+    # fmt: off
+    """Gen proper rows for given triple_set.
 
     Arguments:
         [t_set {np.array or list}] -- [nll matrix]
