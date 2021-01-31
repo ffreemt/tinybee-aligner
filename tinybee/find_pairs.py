@@ -1,4 +1,10 @@
-"""Find potentials pairs"""
+"""Find potentials pairs.
+
+frac = 20 / tgt_len, it = 3
+lowess Locally Weighted Scatterplot Smoothing (LOWESS)
+
+see also statsmodels.nonparametric.kernel_regression
+"""
 # pylint: disable=broad-except, line-too-long
 
 from typing import List, Optional, Tuple, Union
@@ -7,14 +13,12 @@ from scipy.signal import savgol_filter
 from logzero import logger
 
 
-# fmt: off
 def find_pairs(
     arr1: Union[List[float], np.array],
     window_length: int = 10,  # odd int
     polyorder: int = 1,
     thr: Optional[float] = None,
 ) -> List[Tuple[int, int, float]]:
-    # fmt: on
     """Find pairs via savgol-filter."""
     if isinstance(arr1, list):
         try:
@@ -57,4 +61,5 @@ def find_pairs(
 
     _ = [[idx, idy, val] for idx, idy, val in idx_idy_val if val / (1 + abs(idy - yhat[idx])**2) > thr]
 
-    return np.array(_)
+    # return np.array(_)
+    return _
