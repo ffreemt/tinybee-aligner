@@ -1,5 +1,4 @@
-""" fetch doc/para/send corr matrix from fastai server. """
-
+"""Fetch doc/para/send corr matrix from fastai server."""
 from typing import List, Optional, Union
 
 import httpx
@@ -19,8 +18,7 @@ def fetch_sent_corr(
         url: str = URL,
 ) -> Optional[List[List[str]]]:
     # fmt: on
-    """ fetch doc/para/send corr matrix from fastai server. """
-
+    """Fetch doc/para/send corr matrix from fastai server."""
     if isinstance(sents1, str):
         sents1 = [sents1]
     if isinstance(sents2, str):

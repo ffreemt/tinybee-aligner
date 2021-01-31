@@ -1,39 +1,39 @@
 """Gen proper alignment for a given triple_set.
 
-    cmat = fetch_sent_corr(src, tgt)
-    src_len, tgt_len = np.array(cmat).shape
-    r_ali = gen_row_alignment(cmat, tgt_len, src_len)  # note the order
-    src[r_ali[1]], tgt[r_ali[0]], r_ali[2]
+cmat = fetch_sent_corr(src, tgt)
+src_len, tgt_len = np.array(cmat).shape
+r_ali = gen_row_alignment(cmat, tgt_len, src_len)  # note the order
+src[r_ali[1]], tgt[r_ali[0]], r_ali[2]
 
-    or  !!!  (targer, source)
-    cmat = fetch_sent_corr(tgt, src)  # note the order
-    src_len, tgt_len = np.array(cmat).shape
-    r_ali = gen_row_alignment(cmat, src_len, tgt_len)
-    src[r_ali[0]], tgt[r_ali[1]], r_ali[2]
+or  !!!  (targer, source)
+cmat = fetch_sent_corr(tgt, src)  # note the order
+src_len, tgt_len = np.array(cmat).shape
+r_ali = gen_row_alignment(cmat, src_len, tgt_len)
+src[r_ali[0]], tgt[r_ali[1]], r_ali[2]
 
-    ---
-    src_txt = 'data/wu_ch2_en.txt'
-    tgt_txt = 'data/wu_ch2_zh.txt'
+---
+src_txt = 'data/wu_ch2_en.txt'
+tgt_txt = 'data/wu_ch2_zh.txt'
 
-    assert Path(src_txt).exists()
-    assert Path(tgt_txt).exists()
+assert Path(src_txt).exists()
+assert Path(tgt_txt).exists()
 
-    src_text, _ = load_paras(src_txt)
-    tgt_text, _ = load_paras(tgt_txt)
+src_text, _ = load_paras(src_txt)
+tgt_text, _ = load_paras(tgt_txt)
 
-    cos_matrix = gen_cos_matrix(src_text, tgt_text)
-    t_set, m_matrix = find_aligned_pairs(cos_matrix0, thr=0.4, matrix=True)
+cos_matrix = gen_cos_matrix(src_text, tgt_text)
+t_set, m_matrix = find_aligned_pairs(cos_matrix0, thr=0.4, matrix=True)
 
-    resu = gen_row_alignment(t_set, src_len, tgt_len)
-    resu = np.array(resu)
+resu = gen_row_alignment(t_set, src_len, tgt_len)
+resu = np.array(resu)
 
-    idx = -1
-    idx += 1; (resu[idx], src_text[int(resu[idx, 0])],
-        tgt_text[int(resu[idx, 1])]) if all(resu[idx]) else resu[idx]
+idx = -1
+idx += 1; (resu[idx], src_text[int(resu[idx, 0])],
+    tgt_text[int(resu[idx, 1])]) if all(resu[idx]) else resu[idx]
 
-    idx += 1;  i0, i1, i2 = resu[idx]; '***' if i0 == ''
-    else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
-    if i2 == '' else i2
+idx += 1;  i0, i1, i2 = resu[idx]; '***' if i0 == ''
+else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
+if i2 == '' else i2
 """
 # pylint: disable=line-too-long
 
@@ -60,7 +60,6 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
     Returns:
         [np.array] -- [proper rows]
     """
-
     t_set = np.array(t_set, dtype="object")
 
     # len0 = src_len
@@ -133,8 +132,7 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
 
 
 def test_wuch2():
-    """test wuch2"""
-
+    """Test wuch2."""
     filename = "t_set99_wuch2.pkl"
     with open(filename, "rb") as fhandle:
         tset_ch2 = pickle.load(fhandle)
@@ -162,8 +160,7 @@ def test_wuch2():
 
 
 def test_wuch1():
-    """test wuch1"""
-
+    """Test wuch1."""
     filename = "nll_matrix_wuch1.pkl"
     with open(filename, "rb") as fhandle:
         nll_matrix_ch1 = pickle.load(fhandle)
@@ -200,8 +197,7 @@ def test_wuch1():
 
 
 def test_wuch1a():
-    """test wuch1a find_aligned_pairs(nll_matrix_ch1, numb=30)"""
-
+    """Test wuch1a find_aligned_pairs(nll_matrix_ch1, numb=30)."""
     filename = "nll_matrix_wuch1.pkl"
     with open(filename, "rb") as fhandle:
         nll_matrix_ch1 = pickle.load(fhandle)
