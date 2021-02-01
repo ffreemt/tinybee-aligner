@@ -39,7 +39,13 @@ if i2 == '' else i2
 
 import logging
 import pickle
+
+# natural extrapolation with slope equal to 1
+from itertools import zip_longest as zip_longest_middle
+
 import numpy as np
+
+# from tinybee.zip_longest_middle import zip_longest_middle
 
 from tinybee.zip_longest_middle import zip_longest_middle
 from tinybee.find_pairs import find_pairs

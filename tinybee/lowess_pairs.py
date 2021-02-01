@@ -21,7 +21,7 @@ def lowess_pairs(
 ) -> List[Tuple[int, int, float]]:
     """Gen pairs via lowess.
 
-    arr =
+    frac: Optional[float] = None,  # default to 20/arr.shape[1]
     """
     lowess = sm.nonparametric.lowess
     if isinstance(arr1, list):
@@ -33,7 +33,7 @@ def lowess_pairs(
     else:
         arr = arr1
 
-    _, tgt_len = arr.shape  # src_len
+    _, tgt_len = arr.shape  # _ = src_len (leny)
 
     if frac is None:
         frac = 20 / tgt_len

@@ -15,12 +15,16 @@ from logzero import logger
 
 def find_pairs(
     arr1: Union[List[float], np.array],
-    window_length: Optional[Union[int, float]] = 10,  # odd int
+    window_length: Optional[Union[int, float]] = 11,  # odd int
     polyorder: Optional[int] = 1,  # if set to None, use savgol_filter's default
     thr: Optional[float] = None,
     **kwargs,
 ) -> List[Tuple[int, int, float]]:
-    """Find pairs via savgol-filter."""
+    """Find pairs via savgol-filter.
+
+    from tinbee.find_pairs import find_pairs as savgol_pairs
+
+    """
     if isinstance(arr1, list):
         try:
             arr = np.array(arr1)
