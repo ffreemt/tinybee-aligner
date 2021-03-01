@@ -8,7 +8,7 @@ readme = "README.md"
 repository = "https://github.com/ffreemt/tinybee-aligner"
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.7"
 logzero = "^1.6.3"
 httpx = "^0.16.1"
 polyglot = "^16.7.4"
