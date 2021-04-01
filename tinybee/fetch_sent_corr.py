@@ -25,7 +25,6 @@ def fetch_sent_corr(
     if isinstance(sents2, str):
         sents2 = [sents2]
 
-
     len1 = len(sents1)
     len2 = 0
     if sents2 is not None:

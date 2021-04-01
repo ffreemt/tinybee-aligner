@@ -1,4 +1,4 @@
-"""Find potentials pairs.
+"""Find potentials pairs (scipy.signal.savgol_filter).
 
 frac = 20 / tgt_len, it = 3
 lowess Locally Weighted Scatterplot Smoothing (LOWESS)
@@ -18,12 +18,12 @@ def find_pairs(
     window_length: Optional[Union[int, float]] = 11,  # odd int
     polyorder: Optional[int] = 1,  # if set to None, use savgol_filter's default
     thr: Optional[float] = None,
+    interval: int = 8,
     **kwargs,
 ) -> List[Tuple[int, int, float]]:
-    """Find pairs via savgol-filter.
+    """Find pairs via savgol-filter (scipy.signal.savgol_filter).
 
     from tinbee.find_pairs import find_pairs as savgol_pairs
-
     """
     if isinstance(arr1, list):
         try:
@@ -69,16 +69,45 @@ def find_pairs(
     if kwargs["polyorder"] is None:
         del kwargs["polyorder"]
 
+    # default kwargs = dict(window_length=11, polyorder=1)
     yhat = savgol_filter(yargmax, **kwargs)
+    yhat = savgol_filter(yhat, **kwargs)  # smooth one more time
 
-    idx_idy_val = [[idx, idy, val] for idx, (idy, val) in enumerate(zip(yargmax, ymax))]
+    # pick those points of yargmax that are close to yhat
+    _ = zip(yargmax.tolist(), ymax.tolist())
+    idx_idy_val = [[idx, idy, val] for idx, (idy, val) in enumerate(_)]
 
     if thr is None:
-        thr = mean_ - .68 * std_
+        thr = mean_ - 0.68 * std_
     if thr < 0:
         thr = mean_ - 2 * std_
 
-    _ = [(idx, idy, val) for idx, idy, val in idx_idy_val if val / (1 + abs(idy - yhat[idx])**2) > thr]
+    # sign = np.sign(thr)
+    # interval = 5
+    res = [
+        (idx, idy, val)
+        for idx, idy, val in idx_idy_val
+        if (val if abs(idy - yhat[idx]) < interval else val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)) > thr
+    ]
+
+    _ = """
+    _ = [
+        (idx, idy, val)
+        for idx, idy, val in idx_idy_val
+        if val / (1 + abs(idy - yhat[idx]) ** 2) > thr
+    ]
+    # """
+
+    _ = """
+    _ = [
+        (idx, idy, val)
+        for idx, idy, val in idx_idy_val
+        if val > thr + 0.1 * abs(idy - yhat[idx]) ** 2
+    ]
+    # """
 
     # return np.array(_)
-    return _
+    return res
+
+
+savgol_pairs = find_pairs

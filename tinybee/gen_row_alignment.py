@@ -36,9 +36,10 @@ else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
 if i2 == '' else i2
 """
 # pylint: disable=line-too-long
+from typing import List, Tuple, Union
 
 import logging
-import pickle
+# import pickle
 
 # natural extrapolation with slope equal to 1
 from itertools import zip_longest as zip_longest_middle
@@ -47,8 +48,8 @@ import numpy as np
 
 # from tinybee.zip_longest_middle import zip_longest_middle
 
-from tinybee.zip_longest_middle import zip_longest_middle
-from tinybee.find_pairs import find_pairs
+# from tinybee.zip_longest_middle import zip_longest_middle
+# from tinybee.find_pairs import find_pairs
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.addHandler(logging.NullHandler())
@@ -56,7 +57,8 @@ LOGGER.addHandler(logging.NullHandler())
 
 def gen_row_alignment(  # pylint: disable=too-many-locals
     t_set, src_len, tgt_len,
-):
+    # ) -> List[Tuple[Union[str, int], Union[str, int], Union[str, float]]]:
+) -> List[List[Union[str, float]]]:
     """Gen proper rows for given triple_set.
 
     Arguments:
@@ -135,105 +137,3 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
 
     # remove the last entry
     return resu[:-1]
-
-
-def test_wuch2():
-    """Test wuch2."""
-    filename = "t_set99_wuch2.pkl"
-    with open(filename, "rb") as fhandle:
-        tset_ch2 = pickle.load(fhandle)
-
-    resu = gen_row_alignment(tset_ch2, 99, 106)
-
-    assert len(resu) >= 99, "should be larger than 99"
-
-    assert all(np.isclose(resu[0], [0, 0, -0.0062533836]))
-
-    entry = ["", 5, ""]
-    idx = resu.index(entry)
-    resu_ = resu[idx]
-    assert all([elm == resu_[idx] for idx, elm in enumerate(entry)])
-
-    entry = ["", 95, ""]
-    idx = resu.index(entry)
-    resu_ = resu[idx]
-    assert all([elm == resu_[idx] for idx, elm in enumerate(entry)])
-
-    assert all(np.isclose(resu[-1], [98, 105, -3.1654365])), (
-        np.array(resu).shape,
-        resu[-1],
-    )
-
-
-def test_wuch1():
-    """Test wuch1."""
-    filename = "nll_matrix_wuch1.pkl"
-    with open(filename, "rb") as fhandle:
-        nll_matrix_ch1 = pickle.load(fhandle)
-
-    # old gen_nllmatrix
-    nll_matrix_ch1 = nll_matrix_ch1.T
-
-    assert nll_matrix_ch1.shape == (30, 33)
-
-    tset_ch1 = find_pairs(nll_matrix_ch1)
-    src_len, tgt_len = nll_matrix_ch1.shape
-    resu_ch1 = gen_row_alignment(tset_ch1, src_len, tgt_len)
-
-    assert len(resu_ch1) >= src_len, "should be larger than 99"
-
-    assert all(np.isclose(resu_ch1[0], [0, 0, -0.02035301]))
-
-    assert all(np.isclose(resu_ch1[-2], [28, 31, -0.020703452]))
-
-    entry = [29, 32, ""]
-    idx = resu_ch1.index(entry)
-    resu_ = resu_ch1[idx]
-    assert all([elm == resu_[idx] for idx, elm in enumerate(entry)])
-
-    # assert False, resu_ch1
-
-    # entxt = 'wu_ch1_en.txt'
-    # zhtxt = 'wu_ch1_zh.txt'
-    # en = load_paras(r'data\\' + entxt)
-    # zh = load_paras(r'data\\' + zhtxt)
-    # for elm in resu_ch1:
-    #     print('\n', en[0][elm[0]] if elm[0] else '')
-    #     print(zh[0][elm[1]] if elm[1] else '', elm[2])
-
-
-def test_wuch1a():
-    """Test wuch1a find_aligned_pairs(nll_matrix_ch1, numb=30)."""
-    filename = "nll_matrix_wuch1.pkl"
-    with open(filename, "rb") as fhandle:
-        nll_matrix_ch1 = pickle.load(fhandle)
-
-    # old gen_nllmatrix
-    nll_matrix_ch1 = nll_matrix_ch1.T
-
-    assert nll_matrix_ch1.shape == (30, 33)
-
-    src_len, tgt_len = nll_matrix_ch1.shape
-    tset_ch1 = find_pairs(nll_matrix_ch1)
-    resu_ch1 = gen_row_alignment(tset_ch1, src_len, tgt_len)
-
-    assert len(resu_ch1) >= src_len, "should be larger than 99"
-
-    assert all(np.isclose(resu_ch1[0], [0, 0, -0.02035301]))
-    assert all(np.isclose(resu_ch1[-2], [28, 31, -0.020703452]))
-
-    entry = ["", 25, ""]
-    idx = resu_ch1.index(entry)
-    resu_ = resu_ch1[idx]
-    assert all([elm == resu_[idx] for idx, elm in enumerate(entry)])
-
-    assert resu_ch1[27] == ["", 25, ""]
-    # assert False, resu_ch1
-
-    # entxt = 'wu_ch1_en.txt'
-    # zhtxt = 'wu_ch1_zh.txt'
-    # en = load_paras(r'data\\' + entxt)
-    # zh = load_paras(r'data\\' + zhtxt)
-    # for elm in resu_ch1:
-    #     print('\n', en[0][elm[0]] if elm[0] != '' else '')
-    #     print(zh[0][elm[1]] if elm[1] != '' else '', elm[2])

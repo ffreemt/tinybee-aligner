@@ -1,6 +1,6 @@
-"""Gen paris based on lowess.
+"""Gen pairs based on lowess (statsmodels.api.nonparametric.lowess).
 
-cf savgol find_pairs
+cf savgol scipy.signal.savgol_filter) find_pairs
 cf sklearn.kernelreg
 """
 # pylint: disable=broad-except, too-many-locals, duplicate-code
@@ -17,11 +17,13 @@ def lowess_pairs(
     arr1: Union[List[float], np.ndarray],
     frac: Optional[float] = None,  # default to 20/arr.shape[1],
     thr: Optional[float] = None,
+    interval: int = 5,
     **kwargs,
 ) -> List[Tuple[int, int, float]]:
-    """Gen pairs via lowess.
+    """Gen pairs via lowess (sm.nonparametric.lowess).
 
     frac: Optional[float] = None,  # default to 20/arr.shape[1]
+    interval = 5: no touch for abs(idy - yhat[idx]) < interval
     """
     lowess = sm.nonparametric.lowess
     if isinstance(arr1, list):
@@ -31,7 +33,7 @@ def lowess_pairs(
             logger.debug(exc)
             raise SystemExit(1) from exc
     else:
-        arr = arr1
+        arr = arr1.copy()
 
     _, tgt_len = arr.shape  # _ = src_len (leny)
 
@@ -57,14 +59,22 @@ def lowess_pairs(
 
     # return _
 
-    idx_idy_val = [[idx, idy, val] for idx, (idy, val) in enumerate(zip(yargmax, ymax))]
+    _ = zip(yargmax.tolist(), ymax.tolist())
+    idx_idy_val = [[idx, idy, val] for idx, (idy, val) in enumerate(_)]
 
     if thr is not None and thr < 0:
         thr = mean_ - 2 * std_
     if thr is None:
         thr = mean_ - .68 * std_
-    _ = [(idx, idy, val) for idx, idy, val in idx_idy_val if val / (1 + abs(idy - yhat[idx])**2) > thr]
-    # _ = [(idx, idy, val) for idx, idy, val in idx_idy_val]
+    # _ = [(idx, idy, val) for idx, idy, val in idx_idy_val if val / (1 + abs(idy - yhat[idx])**2) > thr]
+
+    # interval = 5
+    res = [
+        (idx, idy, val)
+        for idx, idy, val in idx_idy_val
+        if (val if abs(idy - yhat[idx]) < interval else val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)) > thr
+    ]
 
     # return np.array(_)
-    return _
+    # return _
+    return res

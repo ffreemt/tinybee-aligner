@@ -18,10 +18,18 @@ cchardet = "^2.1.7"
 tqdm = "^4.56.0"
 statsmodels = "^0.12.1"
 httpx = "^0.17.0"
+flake8 = "^3.8.4"
+pyicu = "^2.6"
+pycld2 = "^0.41"
+morfessor = "^2.0.6"
+halo = "^0.0.31"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 ipython = "^7.21.0"
+flake8 = "^3.8.4"
+matplotlib = "^3.3.4"
+seaborn = "^0.11.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
