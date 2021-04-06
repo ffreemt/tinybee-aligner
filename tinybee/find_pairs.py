@@ -1,113 +1,78 @@
-"""Find potentials pairs (scipy.signal.savgol_filter).
+"""Find pairs for a given cmat."""
+from typing import List, Tuple, Union
 
-frac = 20 / tgt_len, it = 3
-lowess Locally Weighted Scatterplot Smoothing (LOWESS)
-
-see also statsmodels.nonparametric.kernel_regression
-"""
-# pylint: disable=broad-except, line-too-long. too-many-branches, duplicate-code
-
-from typing import List, Optional, Tuple, Union
 import numpy as np
-from scipy.signal import savgol_filter
+import pandas as pd
+import logzero
 from logzero import logger
+from tinybee.gen_iset import gen_iset
+from tinybee.cmat2tset import cmat2tset
 
 
 def find_pairs(
-    arr1: Union[List[float], np.array],
-    window_length: Optional[Union[int, float]] = 11,  # odd int
-    polyorder: Optional[int] = 1,  # if set to None, use savgol_filter's default
-    thr: Optional[float] = None,
-    interval: int = 8,
-    **kwargs,
-) -> List[Tuple[int, int, float]]:
-    """Find pairs via savgol-filter (scipy.signal.savgol_filter).
+    cmat1: Union[List[List[float]], np.ndarray, pd.DataFrame],
+    delta: float = 7,
+    verbose: Union[bool, int] = False,
+) -> List[Tuple[int, int, Union[float, str]]]:
+    """Find pairs for a given cmat.
 
-    from tinbee.find_pairs import find_pairs as savgol_pairs
+    Args:
+        cmat: correlation/similarity matrix
+
+    Returns:
+        pairs + "" or metric (float)
     """
-    if isinstance(arr1, list):
-        try:
-            arr = np.array(arr1)
-        except Exception as exc:
-            logger.erorr(exc)
-            raise SystemExit(1) from exc
-    else:
-        arr = arr1.copy()
-    _, len1 = arr.shape
+    if isinstance(verbose, bool):
+        if verbose:
+            verbose = 10
+        else:
+            verbose = 20
+    logzero.loglevel(verbose)
 
-    if window_length is not None:
-        if not isinstance(window_length, int):
-            try:
-                window_length = int(window_length)
-            except Exception as exc:
-                logger.erorr(exc)
-                raise SystemExit(1) from exc
+    # if isinstance(cmat, list):
+    cmat = np.array(cmat1)
 
-    if window_length < 0:
-        window_length = 1
+    src_len, tgt_len = cmat.shape
 
-    if window_length > len1:
-        window_length = len1
+    iset = gen_iset(cmat, verbose=verbose)
+    tset = cmat2tset(cmat)
 
-    if window_length % 2 == 0:
-        window_length += 1  # window_length must be odd
+    *_, ymax = zip(*tset)
+    ymax = list(ymax)
+    low_ = np.min(ymax) - 1
 
-    yargmax = arr.argmax(axis=0)
-    ymax = arr.max(axis=0)
-    mean_, std_ = ymax.mean(), ymax.std()
+    buff = [(-1, -1, ""), (tgt_len, src_len, "")]
+    for _ in range(tgt_len):
+        # postion max in ymax and insert in buff
+        # if with range given by iset+-delta and
+        # it's valid (do not exceed constraint
+        # by neighboring points
+        argmax = int(np.argmax(ymax))
+        ymax[argmax] = low_
+        elm = tset[argmax]
+        elm0, *_ = elm
 
-    # yhat = savgol_filter(y, 13, 1)
-    # yhat = savgol_filter(yargmax, window_length, polyorder)
+        # position elm in buff
+        for idx, loc in enumerate(buff):
+            if loc[0] > elm0:
+                break
+        else:
+            idx += 1  # last
 
-    _ = {"window_length": window_length, "polyorder": polyorder}
+        # insert elm in for valid elm
+        # (within range inside two neighboring points)
+        if abs(tset[argmax][1] - iset[argmax][1]) <= delta:
+            if elm[1] > buff[idx - 1][1] and elm[1] < buff[idx][1]:
+                buff.insert(idx, elm)
+        _ = """
+        if abs(tset[loc][1] - iset[loc][1]) <= delta:
+            if tset[loc][1] > buff[idx][1] and tset[loc][1] < buff[idx + 1][1]:
+                buff.insert(idx + 1, tset[loc])
+        # """
 
-    kwargs.update({"window_length": window_length, "polyorder": polyorder})
+    # remove first and last entry in buff
+    buff.pop(0)
+    buff.pop()
 
-    # if either is None, use original default of savgol_filter
-    if kwargs["window_length"] is None:
-        del kwargs["window_length"]
-    if kwargs["polyorder"] is None:
-        del kwargs["polyorder"]
-
-    # default kwargs = dict(window_length=11, polyorder=1)
-    yhat = savgol_filter(yargmax, **kwargs)
-    yhat = savgol_filter(yhat, **kwargs)  # smooth one more time
-
-    # pick those points of yargmax that are close to yhat
-    _ = zip(yargmax.tolist(), ymax.tolist())
-    idx_idy_val = [[idx, idy, val] for idx, (idy, val) in enumerate(_)]
-
-    if thr is None:
-        thr = mean_ - 0.68 * std_
-    if thr < 0:
-        thr = mean_ - 2 * std_
-
-    # sign = np.sign(thr)
-    # interval = 5
-    res = [
-        (idx, idy, val)
-        for idx, idy, val in idx_idy_val
-        if (val if abs(idy - yhat[idx]) < interval else val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)) > thr
-    ]
-
-    _ = """
-    _ = [
-        (idx, idy, val)
-        for idx, idy, val in idx_idy_val
-        if val / (1 + abs(idy - yhat[idx]) ** 2) > thr
-    ]
-    # """
-
-    _ = """
-    _ = [
-        (idx, idy, val)
-        for idx, idy, val in idx_idy_val
-        if val > thr + 0.1 * abs(idy - yhat[idx]) ** 2
-    ]
-    # """
-
-    # return np.array(_)
-    return res
-
-
-savgol_pairs = find_pairs
+    # return [(1, 1, "")]
+    return buff

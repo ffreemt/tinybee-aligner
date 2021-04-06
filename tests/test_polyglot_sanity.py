@@ -10,12 +10,12 @@ from polyglot.detect.base import logger as polyglot_logger
 
 polyglot_logger.setLevel("ERROR")  # suppress warning
 
-TEXT = '''Analytics India Magazine chronicles technological progress
+TEXT = """Analytics India Magazine chronicles technological progress
 in the space of  analytics, artificial intelligence, data science &
 big data by highlighting the innovations, players, and challenges
 shaping the future of India through promotion and discussion of ideas
 and thoughts by smart, ardent, action-oriented individuals who want to
-change the world.'''
+change the world."""
 
 
 def test_detector():
@@ -36,4 +36,4 @@ def test_morphemes():
 
     refer to polyglot-fix in snippets.
     """
-    assert Word("programming", language="en").morphemes == ['program', 'ming']
+    assert Word("programming", language="en").morphemes == ["program", "ming"]

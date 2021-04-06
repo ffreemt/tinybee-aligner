@@ -36,27 +36,28 @@ else src_text[int(i0)], '***' if i1 == '' else tgt_text[int(i1)], ''
 if i2 == '' else i2
 """
 # pylint: disable=line-too-long
-from typing import List, Tuple, Union
-
-import logging
-# import pickle
+from typing import List, Union
 
 # natural extrapolation with slope equal to 1
 from itertools import zip_longest as zip_longest_middle
 
 import numpy as np
 
+from logzero import logger
+
 # from tinybee.zip_longest_middle import zip_longest_middle
 
 # from tinybee.zip_longest_middle import zip_longest_middle
 # from tinybee.find_pairs import find_pairs
 
-LOGGER = logging.getLogger(__name__)
-LOGGER.addHandler(logging.NullHandler())
+# logger = logging.getLogger(__name__)
+# logger.addHandler(logging.NullHandler())
 
 
 def gen_row_alignment(  # pylint: disable=too-many-locals
-    t_set, src_len, tgt_len,
+    t_set,
+    src_len,
+    tgt_len,
     # ) -> List[Tuple[Union[str, int], Union[str, int], Union[str, float]]]:
 ) -> List[List[Union[str, float]]]:
     """Gen proper rows for given triple_set.
@@ -65,6 +66,7 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
         [t_set {np.array or list}] -- [nll matrix]
         [src_len {int}] -- numb of source texts (para/sents)
         [tgt_len {int}] -- numb of target texts (para/sents)
+
     Returns:
         [np.array] -- [proper rows]
     """
@@ -78,9 +80,19 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
     # rearrange t_set as buff in increasing order
     buff = [[-1, -1, ""]]  #
     idx_t = 0
-    for elm in t_set:
+    # for elm in t_set:
+    # start with bigger value from the 3rd col
+
+    y00, yargmax, ymax = zip(*t_set)
+    ymax_ = np.array(ymax).copy()
+    reset_v = np.min(ymax_) - 1
+    for count in range(tgt_len):
+        argmax = np.argmax(ymax_)
+        # reset
+        ymax_[argmax] = reset_v
+        idx_t = argmax
         elm = t_set[idx_t]
-        LOGGER.debug("%s, %s", idx_t, elm)
+        logger.debug("%s: %s, %s", count, idx_t, elm)
 
         # find loc to insert
         elm0, elm1, elm2 = elm
@@ -104,7 +116,7 @@ def gen_row_alignment(  # pylint: disable=too-many-locals
                 buff.insert(
                     idx, [elm0, elm1, elm2],
                 )
-                # LOGGER.debug('---')
+                # logger.debug('---')
 
         idx_t += 1
         # if idx_t == 24:  # 20:

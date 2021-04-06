@@ -1,8 +1,4 @@
-"""Gen pairs based on lowess (statsmodels.api.nonparametric.lowess).
-
-cf savgol scipy.signal.savgol_filter) find_pairs
-cf sklearn.kernelreg
-"""
+"""Gen pairs based on lowess (statsmodels.api.nonparametric.lowess) cf savgol scipy.signal.savgol_filter) find_pairs cf sklearn.kernelreg."""
 # pylint: disable=broad-except, too-many-locals, duplicate-code
 
 from typing import List, Optional, Tuple, Union
@@ -39,13 +35,15 @@ def lowess_pairs(
 
     if frac is None:
         frac = 20 / tgt_len
-    elif frac > 1:
-        frac = 1.
+
+    if frac > 1:
+        frac = 1.0
+
     kwargs.update({"frac": frac})
 
     # use lowess' original default if set to < 0
-    if frac < 0.:
-        del kwargs['frac']
+    if frac < 0.0:
+        del kwargs["frac"]
 
     x = np.arange(tgt_len)  # pylint: disable=invalid-name
     yargmax = np.array(arr).argmax(axis=0)
@@ -65,15 +63,30 @@ def lowess_pairs(
     if thr is not None and thr < 0:
         thr = mean_ - 2 * std_
     if thr is None:
-        thr = mean_ - .68 * std_
+        thr = mean_ - 0.68 * std_
     # _ = [(idx, idy, val) for idx, idy, val in idx_idy_val if val / (1 + abs(idy - yhat[idx])**2) > thr]
 
     # interval = 5
+    _ = """
     res = [
         (idx, idy, val)
         for idx, idy, val in idx_idy_val
-        if (val if abs(idy - yhat[idx]) < interval else val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)) > thr
+        if (
+            val
+            if abs(idy - yhat[idx]) < interval
+            else val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)
+        )
+        > thr
     ]
+    # """
+    res = []
+    for idx, idy, val in idx_idy_val:
+        if abs(idy - yhat[idx]) < interval:
+            _ = val
+        else:
+            _ = val - (1 + (abs(idy - yhat[idx]) - interval) ** 2)
+        if _ > thr:
+            res.append((idx, idy, val))
 
     # return np.array(_)
     # return _

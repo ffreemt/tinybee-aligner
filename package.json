@@ -1,0 +1,29 @@
+{
+  "name": "tinybee-aligner",
+  "version": "0.1.0",
+  "description": "A tiny alinger for dualtext alignment",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "docstyle": "nodemon -w tests -w tinybee -x \"pydocstyle --convention=google tinybee tests\"",
+    "style": "nodemon -e .py -w tests -w tinybee -x \"black tests tinybee && flake8 --exit-zero tests tinybee\"",
+    "pyright": "nodemon -e .py -w tests -w tinybee -x pyright",
+    "test": "nodemon -w tests -w tinybee -x pytest tests",
+    "start": "pyright && pytest && yarn style",
+    "test:0": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ffreemt/tinybee-aligner.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ffreemt/tinybee-aligner/issues"
+  },
+  "homepage": "https://github.com/ffreemt/tinybee-aligner#readme"
+}
