@@ -18,6 +18,7 @@ def find_pairs(
 
     Args:
         cmat: correlation/similarity matrix
+        verbose: debug level
 
     Returns:
         pairs + "" or metric (float)

@@ -15,7 +15,7 @@ def cmat2tset(
     # if isinstance(cmat, list):
     cmat = np.array(cmat1)
 
-    y00 = range(cmat.shape[0])
+    y00 = range(cmat.shape[1])  # cmat.shape[0] long time wasting bug
     yargmax = cmat.argmax(axis=0)
 
     if thirdcol:

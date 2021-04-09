@@ -130,7 +130,16 @@ def main(argv):
         plt.show(block=True)
     # """
 
-    pset = find_pairs(cmat)
+    # src_emb = embed_text(src_text)
+    # tgt_emb = embed_text(src_text)
+    # cmat = cos_matrix2(src_emb, tgt_emb)
+    # cmat = np.array(cmat)
+
+    # pset = find_pairs(cmat)  # pair set with metrics
+
+    # aset = gen_aset(pset, src_len, tgt_len)  # aset = find_pairs(cmat, delta)
+
+    # align_texts(aset, src_text, tgt_text)  # -> texts
 
 
 if __name__ == "__main__":
