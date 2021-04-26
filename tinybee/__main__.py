@@ -94,10 +94,10 @@ def main(argv):
     # logger.info("\n\t hlm ch1 para")
     cmat = cos_matrix2(hlm_emb_en, hlm_emb_zh)
     cmat = np.array(cmat)
-    
+
     # ax = sns.heatmap(cmat, cmap='gist_earth_r')
     # ax.invert_yaxis()
-    
+
     # cmat = joblib.load(r"data/cmat.lzma")
     # cmat = np.array(cmat)
 
@@ -158,12 +158,12 @@ def main(argv):
     # cmat = cos_matrix2(src_emb, tgt_emb)
     # cmat = np.array(cmat)
 
-    # directly go for pset 
+    # directly go for pset
     # pset1 = find_pairs(cmat)  # pair set with metrics
     # df4 = pd.DataFrame(pset1, columns=["y00", "yargmax", "ymax"])
     # fig, ax = plt.subplots()
     # sns.scatterplot(data=df4, x="y00", y="yargmax", size="ymax", sizes=(1, 110), ax=ax)
-    
+
     # aset = gen_aset(pset1, src_len, tgt_len)
 
     # align_texts(aset, src_text, tgt_text)  # -> texts
