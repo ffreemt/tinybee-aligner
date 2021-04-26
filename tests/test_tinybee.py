@@ -4,4 +4,4 @@ from tinybee import __version__
 
 def test_version():
     """Test version."""
-    assert __version__[:4] == "0.1.3"[:4]
+    assert __version__[:4] == "0.1.4"[:4]
