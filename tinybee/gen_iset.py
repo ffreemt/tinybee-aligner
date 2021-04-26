@@ -14,6 +14,7 @@ import logzero
 from logzero import logger
 
 from tinybee.lowess_pairs import lowess_pairs
+from tinybee.dbscan_pairs import dbscan_pairs
 from tinybee.gen_row_align import gen_row_align
 from tinybee.interpolate_pset import interpolate_pset
 
@@ -25,6 +26,7 @@ from tinybee.interpolate_pset import interpolate_pset
 def gen_iset(
         cmat1: Union[List[List[float]], np.ndarray, pd.DataFrame],
         verbose: Union[bool, float] = False,
+        estimator: str = "dbscan",  # vs lowess
 ) -> List[Tuple[int, int]]:
     # fmt: on
     """Generate pset (pair set) from a given correlation matrix or list.
@@ -54,7 +56,14 @@ def gen_iset(
 
     logger.debug("cmat.shape: %s", cmat.shape)
 
-    yhat = lowess_pairs(cmat)
+    # yhat = lowess_pairs(cmat)
+    # if not yhat: use yhat = dbscan_pairs(cmat)
+
+    if estimator in ["lowess"]:
+        yhat = lowess_pairs(cmat)
+    else:
+        yhat = dbscan_pairs(cmat)
+
     if plot_flag:
         df0 = pd.DataFrame(yhat, columns=["y00", "yargmax", "ymax"])
         fig, ax = plt.subplots()
@@ -64,7 +73,10 @@ def gen_iset(
             plt.show(block=True)
 
     src_len, tgt_len = cmat.shape
+    
+    # eliminate points not in range between neighbors
     pset = gen_row_align(yhat, src_len, tgt_len)
+    
     if plot_flag:
         df1 = pd.DataFrame(pset, columns=["y00", "yargmax", "ymax"])
         fig, ax = plt.subplots()

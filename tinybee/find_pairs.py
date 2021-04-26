@@ -13,6 +13,7 @@ def find_pairs(
     cmat1: Union[List[List[float]], np.ndarray, pd.DataFrame],
     delta: float = 7,
     verbose: Union[bool, int] = False,
+    estimator: str = "dbscan",  # vs lowess
 ) -> List[Tuple[int, int, Union[float, str]]]:
     """Find pairs for a given cmat.
 
@@ -35,7 +36,7 @@ def find_pairs(
 
     src_len, tgt_len = cmat.shape
 
-    iset = gen_iset(cmat, verbose=verbose)
+    iset = gen_iset(cmat, verbose=verbose, estimator=estimator)
     tset = cmat2tset(cmat)
 
     *_, ymax = zip(*tset)
