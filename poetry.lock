@@ -141,6 +141,18 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "fasttext"
+version = "0.9.2"
+description = "fasttext Python bindings"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+pybind11 = ">=2.2"
+
+[[package]]
 name = "fetch-embed"
 version = "0.1.3"
 description = ""
@@ -563,6 +575,17 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
+name = "pybind11"
+version = "2.6.2"
+description = "Seamless operability between C++11 and Python"
+category = "main"
+optional = false
+python-versions = "!=3.0,!=3.1,!=3.2,!=3.3,!=3.4,>=2.7"
+
+[package.extras]
+global = ["pybind11-global (==2.6.2)"]
+
+[[package]]
 name = "pycld2"
 version = "0.41"
 description = "Python bindings around Google Chromium's embedded compact language detection library (CLD2)"
@@ -940,7 +963,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "09517f57af700a02bd4b1159572e7e4974dc2dc726f4d9355041281480352a5c"
+content-hash = "6d8ea18382fbe8f73dda9f56ce901ed533be75e9bda6e638a8e4f8b139d8776e"
 
 [metadata.files]
 absl-py = [
@@ -1028,6 +1051,9 @@ decorator = [
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
+fasttext = [
+    {file = "fasttext-0.9.2.tar.gz", hash = "sha256:665556f1f6dcb4fcbe25fa8ebcd4f71b18fa96a090de09d88d97a60cbd29dcb5"},
 ]
 fetch-embed = [
     {file = "fetch-embed-0.1.3.tar.gz", hash = "sha256:9abd4204f6ffe1b596835e4850c0189d9c0102b00a9361058895f4b742cc1764"},
@@ -1313,6 +1339,10 @@ ptyprocess = [
 py = [
     {file = "py-1.10.0-py2.py3-none-any.whl", hash = "sha256:3b80836aa6d1feeaa108e046da6423ab8f6ceda6468545ae8d02d9d58d18818a"},
     {file = "py-1.10.0.tar.gz", hash = "sha256:21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3"},
+]
+pybind11 = [
+    {file = "pybind11-2.6.2-py2.py3-none-any.whl", hash = "sha256:2d8aebe1709bc367e34e3b23d8eccbf3f387ee9d5640548c6260d33b59f02405"},
+    {file = "pybind11-2.6.2.tar.gz", hash = "sha256:d0e0aed9279656f21501243b707eb6e3b951e89e10c3271dedf3ae41c365e5ed"},
 ]
 pycld2 = [
     {file = "pycld2-0.41.tar.gz", hash = "sha256:a42f6e974df8fdd70685c2baa8a9f523069a260e1140ce604fb9f1fb6c3064df"},
