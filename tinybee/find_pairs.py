@@ -41,7 +41,7 @@ def find_pairs(
 
     *_, ymax = zip(*tset)
     ymax = list(ymax)
-    low_ = np.min(ymax) - 1
+    low_ = np.min(ymax) - 1  # reset to minimum_value - 1
 
     buff = [(-1, -1, ""), (tgt_len, src_len, "")]
     for _ in range(tgt_len):

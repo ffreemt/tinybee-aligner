@@ -13,6 +13,10 @@ def plot_tset(
         xlabel="zh",
         ylabel="en",
         thirdcol="cos",
+        xmin=0,
+        ymin=0,
+        xmax=None,
+        ymax=None,
 ):
     # fmt: on
     """Plot triple set.
@@ -32,6 +36,9 @@ def plot_tset(
     Returns:
         sns.scatter plot
         fig, ax
+
+    ax.set_xlim(xmin=, ymax=)
+    ax.set_ylim(ymin=, ymax=)
     """
     shape = np.array(res).shape
     if len(shape) != 2:
@@ -46,7 +53,17 @@ def plot_tset(
         df_res = pd.DataFrame(res, columns=[xlabel, ylabel])
         sns.scatterplot(x=xlabel, y=ylabel, data=df_res, ax=ax)
 
-        if 'get_ipython' not in globals():
+        if xmax is None or ymax is None:
+            _ = np.array(res)
+            xmax = _[:, 0].max()
+            ymax = _[:, 1].max()
+            logger.info("xmax: %s, ymax: %s", xmax, ymax)
+
+        ax.set_xlim(xmin=xmin, xmax=xmax)
+        ax.set_ylim(ymin=ymin, ymax=ymax)
+        ax.grid()
+
+        if 'get_ipython' not in globals() and 'get_ipython' not in locals():
             logger.info("\n\tKill the plot (ctrl-w or click the cross) to continue.")
             plt.show(block=True)
 
@@ -57,6 +74,15 @@ def plot_tset(
         # df_res = pd.DataFrame(res, columns=["lang2", "argmax", thirdcol])
 
         # sns.relplot(x="lang2", y="argmax", size=thirdcol, hue=thirdcol, sizes=(1, 110), data=df_res)
+
+        if xmax is None or ymax is None:
+            _ = np.array(res)
+            xmax = _[:, 0].max()
+            ymax = _[:, 1].max()
+            logger.info("xmax: %s, ymax: %s", xmax, ymax)
+        ax.set_xlim(xmin=xmin, xmax=xmax)
+        ax.set_ylim(ymin=ymin, ymax=ymax)
+        ax.grid()
 
         df_res = pd.DataFrame(res, columns=[xlabel, ylabel, thirdcol])
         sns.scatterplot(x=xlabel, y=ylabel, size=thirdcol, hue=thirdcol, sizes=(1, 110), data=df_res, ax=ax)

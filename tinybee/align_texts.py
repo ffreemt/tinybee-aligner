@@ -1,4 +1,4 @@
-"""Align texts based aset, src_text, tgt_text."""
+"""Align texts based on aset, src_text, tgt_text."""
 from typing import List, Tuple, Union
 from logzero import logger
 

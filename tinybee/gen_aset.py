@@ -1,4 +1,4 @@
-"""Genereat align set (aset) based on pset, src_lang and tgt_len."""
+"""Genereat align set (aset) based on pset (pair set), src_lang and tgt_len."""
 from typing import List, Tuple, Union
 from itertools import zip_longest
 

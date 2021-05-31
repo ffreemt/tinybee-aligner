@@ -60,6 +60,7 @@ def gen_iset(
     # if not yhat: use yhat = dbscan_pairs(cmat)
 
     if estimator in ["lowess"]:
+        logger.info("Need to install statsmodels")
         yhat = lowess_pairs(cmat)
     else:
         yhat = dbscan_pairs(cmat)
@@ -73,10 +74,11 @@ def gen_iset(
             plt.show(block=True)
 
     src_len, tgt_len = cmat.shape
-    
+
     # eliminate points not in range between neighbors
+    # probably not necessary, already done in dbscan_pairs
     pset = gen_row_align(yhat, src_len, tgt_len)
-    
+
     if plot_flag:
         df1 = pd.DataFrame(pset, columns=["y00", "yargmax", "ymax"])
         fig, ax = plt.subplots()

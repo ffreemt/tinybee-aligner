@@ -32,7 +32,7 @@ flags.DEFINE_boolean("debug", False, "print debug messages.", short_name="d")
 
 def main(argv):
     """Run main.
-    
+
     pset1 = find_pairs(cmat)
         cmat2tset
         validity check based on iset
@@ -43,7 +43,7 @@ def main(argv):
                 interpolate_pset
     aset = gen_aset(pset1, src_len, tgt_len)
     texts = align_texts(aset, src_text, tgt_text)
-    
+
     """
     # logger.info(__file__)
     logger.info(argv[1:])
@@ -105,9 +105,9 @@ def main(argv):
 
     _ = """
     from tinybee.cmat2tset import cmat2tset
-    
+
     # tset = cmat2tset(cmat)
-    
+
     from tinybee.lowess_pairs import lowess_pairs
     yhat = lowess_pairs(cmat)
     df0 = pd.DataFrame(yhat, columns=["y00", "yargmax", "ymax"])
@@ -157,6 +157,14 @@ def main(argv):
     # tgt_emb = embed_text(src_text)
     # cmat = cos_matrix2(src_emb, tgt_emb)
     # cmat = np.array(cmat)
+
+    # cmat, tset, -dbscan fit-> ypred pset,
+    #                   interpolate iset, aset, align text
+    # tset = cmat2tset(cmat)
+    #       db = DBSCAN(eps=eps, min_samples=min_samples)
+    #       db.fit(tset)
+    #       y_pred = db.fit_predict(tset)  # >-1, clustered
+    #           db.components_, db.n_features_in_ (no of clusters)
 
     # directly go for pset
     # pset1 = find_pairs(cmat)  # pair set with metrics
