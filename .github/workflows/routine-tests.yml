@@ -27,7 +27,7 @@ jobs:
         run: poetry install  # --no-dev
       - name: Run flake8
         run: |
-          polyglot download morph2.en
+          python -m polyglot download morph2.en
           poetry run flake8 --exit-zero
           # poetry run pytest
       - name: Run pytest
