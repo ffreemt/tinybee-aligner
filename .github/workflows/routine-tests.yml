@@ -31,6 +31,7 @@ jobs:
           python3 -m pip install pyicu pycld2 morfessor
           python3 -m pip install polyglot
           python3 -m polyglot download morph2.en
+          poetry install
           poetry run flake8 --exit-zero
           # poetry run pytest
       - name: Run pytest
