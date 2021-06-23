@@ -25,10 +25,10 @@ def align_texts(
     yset = [elm for elm in yset if elm != ""]
 
     if (len(xset), len(yset)) != (len(tgt_text), len(src_text)):
-        logger.error(
+        logger.warning(
             " (%s, %s) != (%s, %s) ", len(xset), len(yset), len(tgt_text), len(src_text)
         )
-        raise Exception(" See previous message")
+        # raise Exception(" See previous message")
 
     texts = []
     for elm in aset:
