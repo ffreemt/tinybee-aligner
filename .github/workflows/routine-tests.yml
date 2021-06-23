@@ -22,7 +22,7 @@ jobs:
         with:
           poetry-version: ${{ matrix.poetry-version }}
       - name: Install libicu-dev pkg-config
-        run: sudo apt-get libicu-dev pkg-config
+        run: sudo apt-get install libicu-dev pkg-config
       - name: Install packages
         run: poetry install  # --no-dev
       - name: Run flake8
