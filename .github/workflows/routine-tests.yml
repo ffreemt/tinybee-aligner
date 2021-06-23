@@ -21,10 +21,10 @@ jobs:
       - uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
+      - name: Install libicu-dev pkg-config
+        run: sudo apt-get libicu-dev pkg-config
       - name: Install packages
         run: poetry install  # --no-dev
-      - name: Install libicu-dev pkg-config
-        run: apt install libicu-dev pkg-config
       - name: Run flake8
         run: |
           poetry run flake8 --exit-zero
