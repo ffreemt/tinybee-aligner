@@ -1,6 +1,8 @@
 r"""optics_trace.py in tinybee-aligner/tinybee, pypi\tinybee-aligner\wuch3_pad.py."""
 from typing import Any, List, Tuple, Union
 
+import webbrowser
+# import os
 # import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import OPTICS
@@ -69,7 +71,7 @@ def optics_trace(
 
     opt_w4w = OPTICS(min_samples=min_samples, xi=xi).fit(ltset_w4w)
     n_clusters = set(elm for elm in opt_w4w.labels_ if elm > -1).__len__()
-    n_picked = sum([1 for elm in opt_w4w.labels_ if elm > -1])
+    # n_picked = sum([1 for elm in opt_w4w.labels_ if elm > -1])
     n_outliers = sum([1 for elm in opt_w4w.labels_ if elm == -1])
 
     if plot:
@@ -94,8 +96,19 @@ def optics_trace(
             f"{label + '-- ' if label else ''}min_samples: {min_samples}, xi: {xi}, no. of outliers: {n_outliers}"
         )
 
-        # to see plot in non-ipython session
-        if not "get_ipython" in locals():
-            plt.show(block=True)
-
-    return ltset_w4w[opt_w4w.labels_ > -1], n_picked, n_outliers
+        # to show plot in non-ipython session
+        if "get_ipython" in locals():
+            plt.ion()
+            plt.show()
+        else:
+            # plt.show(block=True)
+            plt.savefig("tmp111.png")
+            plt.close()
+            try:
+                # os.startfile("tmp111.png")
+                webbrowser.open("tmp111.png")
+                logger.info("Opened tmp111.png in default app")
+            except Exception as e:
+                logger.error(e)
+    # return ltset_w4w[opt_w4w.labels_ > -1], n_picked, n_outliers
+    return opt_w4w.labels_

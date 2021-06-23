@@ -4,8 +4,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# need to start in pypi-projects\\light-scores?
+
 if 'get_ipython' in globals():
-    %matplotlib
+    %matplotlib  # matplotlib.use("tkagg")
 
 cdir = 'C:\\dl\\Dropbox\\mat-dir\\myapps\\pypi-projects\\tinybee-aligner'
 os.chdir(cdir)
@@ -13,7 +15,7 @@ os.chdir(cdir)
 sys.path.insert(0, "../fetch-embed")
 # from tinybee.embed_text import embed_text
 from fetch_embed.embed_text import embed_text
-from fetch_embed.cmat2tset import cmat2tset
+from tinybee.cmat2tset import cmat2tset
 from tinybee.find_pairs import find_pairs
 from tinybee.plot_tset import plot_tset
 
@@ -54,14 +56,13 @@ plot_tset(pset_la)
 
 plot_tset(pset_la, xmax_la, ymax_la)
 
-# ---
+# --- w4w
 import sys
 
 sys.path.insert(0, "../light-aligner/")
-from light_aligner.bingmdx_tr import bingmdx_tr
-
 sys.path.insert(0, "../light-scores/")
 from light_scores import light_scores
+from light_aligner.bingmdx_tr import bingmdx_tr
 
 file_en = 'data/wu_ch3_en.txt'
 file_tr = 'data/wu_ch3_zh-tr.txt'
@@ -84,9 +85,13 @@ paras_w4w = [bingmdx_tr(elm) for elm in paras_en]
 # need special treatment for chinese
 
 lmat_w4w = light_scores([" ".join([*elm]) for elm in paras_w4w], [" ".join([*elm]) for elm in paras_zh])
+
 fig = plt.figure()
 ax = fig.subplots()
+sns.heatmap(lmat_w4w, cmap="gist_earth_r")
 ax.invert_yaxis()
+# plt.ion()
+# plt.show()
 
 ltset_w4w = cmat2tset(lmat_w4w)
 plot_tset(ltset_w4w)
@@ -124,7 +129,7 @@ axw4w.plot(ltset_w4w[opt_w4w.labels_ == -1, 0], ltset_w4w[opt_w4w.labels_ == -1,
 axw4w.set_xlim(xmin=0)
 axw4w.set_ylim(ymin=0)
 axw4w.set_title(f"w4w -- min_samples: {min_samples}, xi: {xi}")
-
+ 
 # --- opt_w4w2 ---
 min_samples = 2  # default 5
 xi = 0.00000001  # default 0.05
@@ -138,7 +143,7 @@ axw4w2.plot(ltset_w4w[:,:2][opt_w4w2.labels_ == -1, 0], ltset_w4w[:,:2][opt_w4w2
 axw4w2.set_xlim(xmin=0)
 axw4w2.set_ylim(ymin=0)
 axw4w2.set_title(f"min_samples: {min_samples}, xi: {xi}")
- 
+
 # === c_m ===  snippets-mat\matplotlib-pyplot-ax-plot-formt-memo.txt
 colors = "bgrcmykw"
 colors = "bgrcmyk"

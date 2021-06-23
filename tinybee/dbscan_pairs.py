@@ -25,52 +25,53 @@ def dbscan_pairs(
     """Gen pairs via dbscan clustering.
 
     Args:
+        arr1: correlation matrix
         src_len, tgt_len = arr1.shape
-        esp:    .5% * src_len
+        eps:    .5% * src_len
         min_samples: float,  .5 * tgt_len
+        plot: to plot or not
+        https://colab.research.google.com/drive/17dBcLZ9gZyJV51GP0Q1PEVRyXJb--RnY#scrollTo=NZDxVnLxercQ&uniqifier=9
+    def dbscan(X, eps, min_samples):
+        '''https://medium.com/@plog397/functions-to-plot-kmeans-hierarchical-and-dbscan-clustering-c4146ed69744'''
+        # ss = StandardScaler()
+        # X = ss.fit_transform(X)
+        db = DBSCAN(eps=eps, min_samples=min_samples)  # .5%？ 50， 5 for 10000 1000
+        db.fit(X)
+        y_pred = db.fit_predict(X)
+        plt.scatter(X[:,0], X[:,1], c=y_pred, cmap='Paired')
+        # display(y_pred)
+        plt.title("DBSCAN")
 
-https://colab.research.google.com/drive/17dBcLZ9gZyJV51GP0Q1PEVRyXJb--RnY#scrollTo=NZDxVnLxercQ&uniqifier=9
-def dbscan(X, eps, min_samples):
-    '''https://medium.com/@plog397/functions-to-plot-kmeans-hierarchical-and-dbscan-clustering-c4146ed69744'''
-    # ss = StandardScaler()
-    # X = ss.fit_transform(X)
-    db = DBSCAN(eps=eps, min_samples=min_samples)  # .5%？ 50， 5 for 10000 1000
-    db.fit(X)
-    y_pred = db.fit_predict(X)
-    plt.scatter(X[:,0], X[:,1], c=y_pred, cmap='Paired')
-    # display(y_pred)
-    plt.title("DBSCAN")
+        import joblib
+        from tinybee.cos_matrix2 import cos_matrix2
 
-    import joblib
-    from tinybee.cos_matrix2 import cos_matrix2
+        cmat = joblib.load("data/cmat.lzma")
+        arr = cmat.copy()
 
-    cmat = joblib.load("data/cmat.lzma")
-    arr = cmat.copy()
+        hlm_ch1_en_emb = joblib.load("data/hlm_ch1_en_emb.lzma")
+        hlm_ch1_zh_emb = joblib.load("data/hlm_ch1_zh_emb.lzma")
+        cmat_hlmch1 = cos_matrix2(hlm_ch1_en_emb, hlm_ch1_zh_emb)
+        arr = cmat_hlmch1.copy()
 
-    hlm_ch1_en_emb = joblib.load("data/hlm_ch1_en_emb.lzma")
-    hlm_ch1_zh_emb = joblib.load("data/hlm_ch1_zh_emb.lzma")
-    cmat_hlmch1 = cos_matrix2(hlm_ch1_en_emb, hlm_ch1_zh_emb)
-    arr = cmat_hlmch1.copy()
+        tset = dbscan_pairs(cmat_hlmch1)
 
-    tset = dbscan_pairs(cmat_hlmch1)
+        fig = plt.figure(figsize=(8, 6))
+        ax1 = fig.add_subplot(111)
 
-    fig = plt.figure(figsize=(8, 6))
-    ax1 = fig.add_subplot(111)
+        df = pd.DataFrame(tset, columns=['y', 'yargmax', 'ymax'])
+        sns.scatterplot(data=df, x="y", y="yargmax", size="ymax", sizes=(1, 110))  # legend='auto'
 
-    df = pd.DataFrame(tset, columns=['y', 'yargmax', 'ymax'])
-    sns.scatterplot(data=df, x="y", y="yargmax", size="ymax", sizes=(1, 110))  # legend='auto'
+        corr1000x1100 = joblib.load("data/corr1000x1100.lzma")
+        tset1000x1100 = dbscan_pairs(corr1000x1100, plot=1)
+        df1000x1100 = pd.DataFrame(tset1000x1100, columns=['y', 'yargmax', 'ymax'])
+        fig = plt.figure(figsize=(8, 6))
+        ax1 = fig.add_subplot(111)
+        sns.scatterplot(data=df1000x1100, x="y", y="yargmax", size="ymax", sizes=(1, 50))
 
-    corr1000x1100 = joblib.load("data/corr1000x1100.lzma")
-    tset1000x1100 = dbscan_pairs(corr1000x1100, plot=1)
-    df1000x1100 = pd.DataFrame(tset1000x1100, columns=['y', 'yargmax', 'ymax'])
-    fig = plt.figure(figsize=(8, 6))
-    ax1 = fig.add_subplot(111)
-    sns.scatterplot(data=df1000x1100, x="y", y="yargmax", size="ymax", sizes=(1, 50))
-
-    ---
-    import matplotlib a mpl
-    mpl.rcParams['lines.markersize'] = 6
-    size: mpl.rcParams['lines.markersize']**2
+        ---
+        import matplotlib a mpl
+        mpl.rcParams['lines.markersize'] = 6
+        size: mpl.rcParams['lines.markersize']**2
     """
     if isinstance(arr1, list):
         try:

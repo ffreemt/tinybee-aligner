@@ -1,4 +1,7 @@
-"""Gen pairs based on lowess (statsmodels.api.nonparametric.lowess) cf savgol scipy.signal.savgol_filter) find_pairs cf sklearn.kernelreg."""
+"""Gen pairs based on lowess (statsmodels.api.nonparametric.lowess) cf savgol scipy.signal.savgol_filter) find_pairs cf sklearn.kernelreg.
+
+from scipy.signal import savgol_filter
+"""
 # pylint: disable=broad-except, too-many-locals, duplicate-code
 
 from typing import List, Optional, Tuple, Union

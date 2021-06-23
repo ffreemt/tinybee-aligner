@@ -1,4 +1,4 @@
-"""Gen row alignment from tset, bigger ymax first. Varous util functions for plotting."""
+"""Gen row alignment from tset, bigger ymax first. Various util functions for plotting."""
 from typing import List, Tuple  # , Union
 
 import numpy as np

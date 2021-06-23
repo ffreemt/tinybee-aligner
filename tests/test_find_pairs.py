@@ -5,7 +5,7 @@ from tinybee.find_pairs import find_pairs
 from tinybee.cos_matrix2 import cos_matrix2
 
 
-def test_find_pairs_via_lowess():
+def t_est_find_pairs_via_lowess():
     """Test find_pairs."""
     shen600 = joblib.load("data/shen600.lzma")
     shzh500 = joblib.load("data/shzh600.lzma")[:500]
@@ -21,7 +21,7 @@ def test_find_pairs_via_lowess():
     assert pairs[-5][:2] == (488, 189)
 
 
-def test_find_pairs_via_dbscan():
+def t_est_find_pairs_via_dbscan():
     """Test find_pairs."""
     shen600 = joblib.load("data/shen600.lzma")
     shzh500 = joblib.load("data/shzh600.lzma")[:500]

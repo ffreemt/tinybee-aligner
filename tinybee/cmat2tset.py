@@ -9,17 +9,18 @@ import pandas as pd
 def cmat2tset(
     cmat1: Union[List[List[float]], np.ndarray, pd.DataFrame],
     # thirdcol: bool = True
-) -> List[Union[Tuple[int, int], Tuple[int, int, float]]]:
+# ) -> List[Union[Tuple[int, int], Tuple[int, int, float]]]:
+) -> np.ndarray:
     # fmt: on
     """Gen triple-set from a matrix.
 
     Args
         cmat: 2d-array or list, correlation or other metric matrix
         # thirdcol: bool, whether to output a third column (max value)
-    Returns:
 
-    Obtain the max and argmax for each column, erase the row afterwards to eliminate one single row  that would dominate
-    every column.
+    Returns
+        Obtain the max and argmax for each column, erase the row afterwards to eliminate one single row  that would dominate
+        every column.
     """
     # if isinstance(cmat, list):
     cmat = np.array(cmat1)
@@ -45,9 +46,10 @@ def cmat2tset(
     """
     low_ = cmat.min() - 1
     argmax_max = []
-    _, tgt_len = cmat.shape
-    for _ in range(tgt_len):
-        row, col = divmod(cmat.argmax(), tgt_len)
+    src_len, tgt_len = cmat.shape
+    for _ in range(min(src_len, tgt_len)):
+        argmax = int(cmat.argmax())
+        row, col = divmod(argmax, tgt_len)
         argmax_max.append([col, row, cmat.max()])
 
         # erase row-th row and col-th col of cmat
