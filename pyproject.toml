@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tinybee"
-version = "0.1.4"
+version = "0.1.5"
 description = "A tiny aligner for dualtext alignment"
 authors = ["ffreemt"]
 license = "MIT"
