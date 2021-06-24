@@ -27,13 +27,13 @@ jobs:
         run: poetry install  # --no-dev
       - name: Run flake8
         run: |
-          python -V
-          python3 -m pip install pip -U
-          python3 -m pip install pyicu pycld2 morfessor
-          python3 -m pip install polyglot
+          # python -V  # already python3
+          python -m pip install pip -U
+          python -m pip install pyicu pycld2 morfessor
+          python -m pip install polyglot
           # poetry install
-          python3 -m pip install numpy
-          python3 -m polyglot download morph2.en
+          python -m pip install numpy
+          python -m polyglot download morph2.en
           poetry run flake8 --exit-zero
           # poetry run pytest
       - name: Run pytest

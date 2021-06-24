@@ -139,3 +139,8 @@ cython_debug/
 *.bat
 *.swp
 memo-to-self.txt
+hlm-ch1-batch_tr-pad.py
+hlm-ch1-pad.py
+wuch3_pad.py
+requirements-dev.txt
+requirements-p.txt
