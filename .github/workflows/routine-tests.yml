@@ -27,6 +27,7 @@ jobs:
         run: poetry install  # --no-dev
       - name: Run flake8
         run: |
+          python -V
           python3 -m pip install pip -U
           python3 -m pip install pyicu pycld2 morfessor
           python3 -m pip install polyglot
