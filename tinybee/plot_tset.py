@@ -7,6 +7,7 @@ import seaborn as sns
 from logzero import logger
 
 sns.set()
+sns.set_style("darkgrid")
 
 
 # fmt: off

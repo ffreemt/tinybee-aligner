@@ -8,8 +8,8 @@ from itertools import zip_longest
 # fmt: off
 def gen_aset(
         pset: List[Tuple[int, int, float]],
-        src_len: int,
-        tgt_len: int,
+        src_len: int,  # n_rows
+        tgt_len: int,  # n_cols
 ) -> List[Tuple[Union[str, float], Union[str, float], Union[str, float]]]:
     # fmt: on
     """Genereat align set (aset) based on pset, src_lang and tgt_len.
@@ -29,10 +29,21 @@ def gen_aset(
         ...
         [tgt_len-1, src_len-1, .]
     """
+    # empty pset []
+    if not pset:
+        return [*zip_longest(range(tgt_len), range(src_len), fillvalue="")]
+    # empty [[]]
+    if len(pset) == 1:
+        if not pset[0]:
+            return [*zip_longest(range(tgt_len), range(src_len), fillvalue="")]
+
     buff = []
     pos0, pos1 = -1, -1
     for elm in pset:
-        elm0, elm1, elm2 = elm
+        # elm0, elm1, elm2 = elm
+        elm0, elm1, *elm2 = elm
+        elm0 = int(elm0)
+        elm1 = int(elm1)
         interval = max(elm0 - pos0 - 1, elm1 - pos1 - 1)
         _ = zip_longest(range(pos0 + 1, elm0), range(pos1 + 1, elm1), [""] * interval, fillvalue="")
         buff.extend(_)
@@ -43,6 +54,6 @@ def gen_aset(
     elm0, elm1 = tgt_len, src_len
     interval = max(elm0 - pos0 - 1, elm1 - pos1 - 1)
     _ = zip_longest(range(pos0 + 1, elm0), range(pos1 + 1, elm1), [""] * interval, fillvalue="")
-    buff.extend(_)
+    buff.extend(_) 
 
     return buff

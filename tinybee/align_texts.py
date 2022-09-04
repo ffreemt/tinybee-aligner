@@ -20,7 +20,7 @@ def align_texts(
     Returns:
         aligned texts with possible mertics
     """
-    xset, yset, metrics = zip(*aset)  # unzip
+    xset, yset, metrics = zip(*aset)  # unzip aset
     xset = [elm for elm in xset if elm != ""]
     yset = [elm for elm in yset if elm != ""]
 

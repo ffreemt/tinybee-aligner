@@ -29,6 +29,10 @@ from tinybee.embed_text import embed_text
 FLAGS = flags.FLAGS
 flags.DEFINE_boolean("debug", False, "print debug messages.", short_name="d")
 
+sns.set()
+sns.set_theme(style="darkgrid")
+plt.ion()
+
 
 def main(argv):
     """Run main.
@@ -94,6 +98,33 @@ def main(argv):
     # logger.info("\n\t hlm ch1 para")
     cmat = cos_matrix2(hlm_emb_en, hlm_emb_zh)
     cmat = np.array(cmat)
+
+    # df_c = df_c = pd.DataFrame({'x': range(cmat.shape[1]), 'y': cmat.argmax(axis=0), 'cos': cmat.max(0)})
+    # sum(DBSCAN(eps=7, min_samples=3).fit(df_c).labels_ > -1)
+    # 32 > len(df_c) / 2
+    # df_c.plot.scatter('x', 'y', c=DBSCAN(eps=8, min_samples=3).fit(df_c).labels_ > -1, cmap="Blues")
+
+    # cmat1 = np.inner(hlm_emb_en, hlm_emb_zh)
+    # cmat = cmat1 / norm_mat (cf. cos_matrix2.py)
+    # np.dot(hlm_emb_en[0], hlm_emb_zh[1]) == cmat1[0, 1]
+    # normalize along column axis-1
+    # from sklearn.preprocessing import normalize
+    # cmat1n = normalize(cmat1, axis=1)
+    # np.linalg.norm(cmat1n, axis=1): all 1
+    # df_c_ = pd.DataFrame(cmat2tset(cmat), columns=['x', 'y', 'cos'])
+    # df_c_n = pd.DataFrame({'x': range(cmat1n.shape[1]), 'y': cmat1n.argmax(axis=0), 'cos': cmat1n.max(0)})  # ordered
+    # df_c_n0 = pd.DataFrame(cmat2tset(cmat1n), columns=['x', 'y', 'cos'])  # not ordered
+    # _ = df_c_n0.sort_values(by=['x'])
+    # df_c_n1 = _.reset_index(drop=True)
+    # df_c_n.plot.scatter('x', 'y', c=DBSCAN(eps=8, min_samples=3).fit(df_c_n).labels_ > -1)
+    # df_c_n1.plot.scatter('x', 'y', c=DBSCAN(eps=8, min_samples=3).fit(df_c_n1).labels_ > -1)
+
+    # tset: cmat2tset, ordered on cos, remove other entries
+    # pd.DataFrame({'x': range(cmat.shape[1]), 'y': cmat.argmax(axis=0), 'cos': cmat.max(0)}): simple max
+
+    # DBSCAN: esp=x + 1, until sum( > -1) > len(df) or eps > len(df) / 2
+
+    # ############
 
     # ax = sns.heatmap(cmat, cmap='gist_earth_r')
     # ax.invert_yaxis()

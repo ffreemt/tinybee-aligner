@@ -8,3 +8,29 @@ A tiny alinger for dualtext alignment
 ```bash
 apt install libicu-dev
 ```
+
+### for textacy
+
+pip whl
+```
+cytoolz
+```
+
+#### compile jellyfish, use MS VC or mingw64
+```bash
+set PATH=C:\MinGW64\bin;%PATH%
+```
+
+amend `C:\Python\Python37\Lib\distutils`
+```bash
+[build]
+compiler = mingw64
+
+[build_ext]
+compiler = mingw64
+```
+
+clone `jellyfish` && cd jellyfish
+```
+python setup.py install
+```

@@ -127,9 +127,14 @@ def dbscan_pairs(
         plt.scatter(tset[:,0], tset[:,1], cmap='Paired')  # , s=4
         plt.scatter(xcl, ycl, s=10)
 
+    _ = """
     res = []
     for idx, idy, val in zip(xcl, ycl, val):
         res.append((idx, idy, val,))
+    """
+
+    # res is simply [*zip(xcl, ycl, val)]
+    res = [*zip(xcl, ycl, val)]
 
     return res
 

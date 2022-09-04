@@ -33,6 +33,9 @@ def lrtrace_tset(
         tset_: Union[List[float], np.ndarray],
         min_samples: int = 2,
         min_cluster_size: int = 5,
+        slope: float = 0.9,
+        rvalue: float = 0.9,
+        stderr: float = 0.21,
 ) -> np.ndarray:
     # fmt: on
     """Id piecewise trace of a tset via linear regression/OPTICS.
@@ -41,6 +44,7 @@ def lrtrace_tset(
         tset: nx2 or nx3 triple set
         min_samples: OPTICS param
         min_cluster_size: OPTICS param
+        min_samples: int = 2; min_cluster_size: int = 5
 
     Returns:
         aling trace based piecewise linear regression
@@ -71,7 +75,8 @@ def lrtrace_tset(
     # valid_set = tlz.concat(elm for elm in tset_[labels_ > -1] if check_valid(elm))
 
     len_ = len(set(labels_)) - 1
-    valid_set = seq([tset_[labels_ == elm] for elm in range(len_)]).filter(check_valid)
+    # valid_set = seq([tset_[labels_ == elm] for elm in range(len_)]).filter(check_valid)
+    valid_set = seq([tset_[labels_ == elm] for elm in range(len_)]).filter(lambda x: check_valid(x, slope=slope, rvalue=rvalue, stderr=stderr))
 
     vset = valid_set.reduce(lambda x, y: np.concatenate((x, y))).to_list()
 
